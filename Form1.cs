@@ -115,13 +115,14 @@ namespace GrblOutput {
 		private void DisplayCurrentRow(object sender, EventArgs e) {
 			serialResponseList.Items.Add(lines[CurrentRow-1]);
 			serialResponseList.TopIndex = serialResponseList.Items.Count - 1;
-			sentRowsLbl.Text = "Sent rows: " + CurrentRow.ToString();			
+			sentRowsLbl.Text = "Sent rows: " + CurrentRow.ToString();
 		}
 
 		private void PrintDone(object sender, EventArgs e) {
-			MessageBox.Show("Yeay, all the G-code was sent to Grbl.", "Done...");
+			MessageBox.Show("Yeay, all the G-code was sent to Grbl.", "Done...", MessageBoxButtons.OK, MessageBoxIcon.Information);
 			stopPrintBtn.Enabled = false;
 			PrintBtn.Enabled = true;
+			BrowseBtn.Enabled = true;
 		}
 
 		private void serialPort1_DataReceived
@@ -158,6 +159,7 @@ namespace GrblOutput {
 			if (File.Exists(textBox1.Text)) {
 				using (StreamReader r = new StreamReader(textBox1.Text)) {
 					PrintBtn.Enabled = false;
+					BrowseBtn.Enabled = false;
 					stopPrintBtn.Enabled = true;
 					lines = new List<string>();
 					CurrentRow = 0;
@@ -205,7 +207,7 @@ namespace GrblOutput {
 				if (serialPort1.IsOpen)
 					serialPort1.Close();
 			} catch (Exception ex) {
-				MessageBox.Show(ex.Message);
+				MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
 
@@ -213,6 +215,7 @@ namespace GrblOutput {
 			transfer = false;
 			stopPrintBtn.Enabled = false;
 			PrintBtn.Enabled = true;
+			BrowseBtn.Enabled = true;
 			serialPort1.WriteLine("M5");
 			serialPort1.WriteLine("G0 X0 Y0");
 		}
