@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.IO.Ports;
+using System.Text.RegularExpressions;
 
 namespace GrblOutput {
 	public partial class Form1 : Form {
@@ -22,6 +23,9 @@ namespace GrblOutput {
 			System.Windows.Forms.Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
 			AppDomain currentDomain = AppDomain.CurrentDomain;
 			currentDomain.UnhandledException += new UnhandledExceptionEventHandler(Application_UnhandledException);
+
+			disableControlsForPrinting();
+			stopPrintBtn.Enabled = false;
 		}
 
 		private static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e) {
@@ -68,8 +72,8 @@ namespace GrblOutput {
 				ReloadBtn.Enabled = false;
 				StartBtn.Enabled = false;
 				StopBtn.Enabled = true;
-				PrintBtn.Enabled = true;
 				textBox3.ReadOnly = false;
+				enableControlsForPrinting();
 			}
 		}
 
@@ -80,9 +84,11 @@ namespace GrblOutput {
 				ReloadBtn.Enabled = true;
 				StartBtn.Enabled = true;
 				StopBtn.Enabled = false;
-				PrintBtn.Enabled = false;
 				textBox3.ReadOnly = true;
 				transfer = false;
+				disableControlsForPrinting();
+				BrowseBtn.Enabled = true;
+				stopPrintBtn.Enabled = false;
 			}
 
 		}
@@ -114,15 +120,15 @@ namespace GrblOutput {
 
 		private void DisplayCurrentRow(object sender, EventArgs e) {
 			serialResponseList.Items.Add(lines[CurrentRow-1]);
-			serialResponseList.TopIndex = serialResponseList.Items.Count - 1;
+			if(scrollOutputChkbox.Checked)
+				serialResponseList.TopIndex = serialResponseList.Items.Count - 1;
 			sentRowsLbl.Text = "Sent rows: " + CurrentRow.ToString();
 		}
 
 		private void PrintDone(object sender, EventArgs e) {
 			MessageBox.Show("Yeay, all the G-code was sent to Grbl.", "Done...", MessageBoxButtons.OK, MessageBoxIcon.Information);
-			stopPrintBtn.Enabled = false;
-			PrintBtn.Enabled = true;
-			BrowseBtn.Enabled = true;
+			transfer = false;
+			enableControlsForPrinting();
 		}
 
 		private void serialPort1_DataReceived
@@ -140,6 +146,15 @@ namespace GrblOutput {
 			try {
 				if(serialPort1.IsOpen) {
 					if (CurrentRow < lines.Count) {
+						// Check if we need to override and F command. This is a little rude, we just replaces first F in line...
+						if (lines[CurrentRow].ToLower().IndexOf('f') > -1 && overrideSpeedChkbox.Checked) {
+							// Yea, this can be done a lot better.
+							int startPos = lines[CurrentRow].ToLower().IndexOf('f') + 1;
+							string firstPart = lines[CurrentRow].Substring(0, startPos);
+							string lastPart = lines[CurrentRow].Substring(startPos);
+							lastPart = Regex.Replace(lastPart, "^\\d+(.\\d*)", speedOverrideNumber.Value.ToString());
+							lines[CurrentRow] = firstPart + lastPart;
+						}
 						serialPort1.WriteLine(lines[CurrentRow]);
 						CurrentRow++;
 						this.Invoke(new EventHandler(DisplayCurrentRow));
@@ -158,9 +173,7 @@ namespace GrblOutput {
 		private void PrintBtn_Click(object sender, EventArgs e) {
 			if (File.Exists(textBox1.Text)) {
 				using (StreamReader r = new StreamReader(textBox1.Text)) {
-					PrintBtn.Enabled = false;
-					BrowseBtn.Enabled = false;
-					stopPrintBtn.Enabled = true;
+					disableControlsForPrinting();
 					lines = new List<string>();
 					CurrentRow = 0;
 					transfer = true;
@@ -174,6 +187,24 @@ namespace GrblOutput {
 					sendNextLine();
 				}
 			}
+		}
+
+		private void enableControlsForPrinting() {
+			stopPrintBtn.Enabled = false;
+			PrintBtn.Enabled = true;
+			BrowseBtn.Enabled = true;
+			overrideSpeedChkbox.Enabled = true;
+			speedOverrideNumber.Enabled = true;
+			textBox1.Enabled = true;
+		}
+
+		private void disableControlsForPrinting() {
+			PrintBtn.Enabled = false;
+			BrowseBtn.Enabled = false;
+			overrideSpeedChkbox.Enabled = false;
+			speedOverrideNumber.Enabled = false;
+			stopPrintBtn.Enabled = true;
+			textBox1.Enabled = false;
 		}
 
 		private void loadPortSelector() {
@@ -213,9 +244,7 @@ namespace GrblOutput {
 
 		private void stopPrintBtn_Click(object sender, EventArgs e) {
 			transfer = false;
-			stopPrintBtn.Enabled = false;
-			PrintBtn.Enabled = true;
-			BrowseBtn.Enabled = true;
+			enableControlsForPrinting();
 			serialPort1.WriteLine("M5");
 			serialPort1.WriteLine("G0 X0 Y0");
 		}

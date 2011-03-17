@@ -39,14 +39,18 @@
 			this.stopPrintBtn = new System.Windows.Forms.Button();
 			this.serialResponseList = new System.Windows.Forms.ListBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.radioButton2 = new System.Windows.Forms.RadioButton();
+			this.radioButton1 = new System.Windows.Forms.RadioButton();
 			this.label2 = new System.Windows.Forms.Label();
 			this.ReloadBtn = new System.Windows.Forms.Button();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.overrideSpeedChkbox = new System.Windows.Forms.CheckBox();
 			this.label1 = new System.Windows.Forms.Label();
-			this.radioButton1 = new System.Windows.Forms.RadioButton();
-			this.radioButton2 = new System.Windows.Forms.RadioButton();
+			this.scrollOutputChkbox = new System.Windows.Forms.CheckBox();
+			this.speedOverrideNumber = new System.Windows.Forms.NumericUpDown();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.speedOverrideNumber)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// serialPort1
@@ -106,9 +110,9 @@
 			// 
 			// PrintBtn
 			// 
-			this.PrintBtn.Location = new System.Drawing.Point(150, 60);
+			this.PrintBtn.Location = new System.Drawing.Point(6, 59);
 			this.PrintBtn.Name = "PrintBtn";
-			this.PrintBtn.Size = new System.Drawing.Size(75, 24);
+			this.PrintBtn.Size = new System.Drawing.Size(52, 24);
 			this.PrintBtn.TabIndex = 8;
 			this.PrintBtn.Text = "Print";
 			this.PrintBtn.UseVisualStyleBackColor = true;
@@ -126,7 +130,7 @@
 			// rowsInFileLbl
 			// 
 			this.rowsInFileLbl.AutoSize = true;
-			this.rowsInFileLbl.Location = new System.Drawing.Point(6, 57);
+			this.rowsInFileLbl.Location = new System.Drawing.Point(112, 93);
 			this.rowsInFileLbl.Name = "rowsInFileLbl";
 			this.rowsInFileLbl.Size = new System.Drawing.Size(46, 13);
 			this.rowsInFileLbl.TabIndex = 12;
@@ -135,7 +139,7 @@
 			// sentRowsLbl
 			// 
 			this.sentRowsLbl.AutoSize = true;
-			this.sentRowsLbl.Location = new System.Drawing.Point(6, 73);
+			this.sentRowsLbl.Location = new System.Drawing.Point(6, 93);
 			this.sentRowsLbl.Name = "sentRowsLbl";
 			this.sentRowsLbl.Size = new System.Drawing.Size(66, 13);
 			this.sentRowsLbl.TabIndex = 13;
@@ -144,9 +148,9 @@
 			// stopPrintBtn
 			// 
 			this.stopPrintBtn.Enabled = false;
-			this.stopPrintBtn.Location = new System.Drawing.Point(231, 60);
+			this.stopPrintBtn.Location = new System.Drawing.Point(64, 59);
 			this.stopPrintBtn.Name = "stopPrintBtn";
-			this.stopPrintBtn.Size = new System.Drawing.Size(75, 24);
+			this.stopPrintBtn.Size = new System.Drawing.Size(52, 24);
 			this.stopPrintBtn.TabIndex = 14;
 			this.stopPrintBtn.Text = "Stop";
 			this.stopPrintBtn.UseVisualStyleBackColor = true;
@@ -156,10 +160,10 @@
 			// 
 			this.serialResponseList.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
 			this.serialResponseList.FormattingEnabled = true;
-			this.serialResponseList.Location = new System.Drawing.Point(12, 109);
+			this.serialResponseList.Location = new System.Drawing.Point(12, 132);
 			this.serialResponseList.Name = "serialResponseList";
 			this.serialResponseList.SelectionMode = System.Windows.Forms.SelectionMode.None;
-			this.serialResponseList.Size = new System.Drawing.Size(584, 277);
+			this.serialResponseList.Size = new System.Drawing.Size(584, 251);
 			this.serialResponseList.TabIndex = 15;
 			this.serialResponseList.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.serialResponseList_DrawItem);
 			// 
@@ -179,6 +183,28 @@
 			this.groupBox1.TabIndex = 16;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Serial";
+			// 
+			// radioButton2
+			// 
+			this.radioButton2.AutoSize = true;
+			this.radioButton2.Checked = true;
+			this.radioButton2.Location = new System.Drawing.Point(214, 17);
+			this.radioButton2.Name = "radioButton2";
+			this.radioButton2.Size = new System.Drawing.Size(44, 17);
+			this.radioButton2.TabIndex = 18;
+			this.radioButton2.TabStop = true;
+			this.radioButton2.Text = "\\r\\n";
+			this.radioButton2.UseVisualStyleBackColor = true;
+			// 
+			// radioButton1
+			// 
+			this.radioButton1.AutoSize = true;
+			this.radioButton1.Location = new System.Drawing.Point(164, 17);
+			this.radioButton1.Name = "radioButton1";
+			this.radioButton1.Size = new System.Drawing.Size(44, 17);
+			this.radioButton1.TabIndex = 17;
+			this.radioButton1.Text = "\\n\\r";
+			this.radioButton1.UseVisualStyleBackColor = true;
 			// 
 			// label2
 			// 
@@ -201,6 +227,8 @@
 			// 
 			// groupBox2
 			// 
+			this.groupBox2.Controls.Add(this.speedOverrideNumber);
+			this.groupBox2.Controls.Add(this.overrideSpeedChkbox);
 			this.groupBox2.Controls.Add(this.label1);
 			this.groupBox2.Controls.Add(this.textBox1);
 			this.groupBox2.Controls.Add(this.BrowseBtn);
@@ -210,10 +238,20 @@
 			this.groupBox2.Controls.Add(this.sentRowsLbl);
 			this.groupBox2.Location = new System.Drawing.Point(283, 12);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(313, 91);
+			this.groupBox2.Size = new System.Drawing.Size(313, 114);
 			this.groupBox2.TabIndex = 17;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "File transfer";
+			// 
+			// overrideSpeedChkbox
+			// 
+			this.overrideSpeedChkbox.AutoSize = true;
+			this.overrideSpeedChkbox.Location = new System.Drawing.Point(194, 64);
+			this.overrideSpeedChkbox.Name = "overrideSpeedChkbox";
+			this.overrideSpeedChkbox.Size = new System.Drawing.Size(98, 17);
+			this.overrideSpeedChkbox.TabIndex = 17;
+			this.overrideSpeedChkbox.Text = "Override speed";
+			this.overrideSpeedChkbox.UseVisualStyleBackColor = true;
 			// 
 			// label1
 			// 
@@ -224,33 +262,46 @@
 			this.label1.TabIndex = 15;
 			this.label1.Text = "File";
 			// 
-			// radioButton1
+			// scrollOutputChkbox
 			// 
-			this.radioButton1.AutoSize = true;
-			this.radioButton1.Location = new System.Drawing.Point(164, 17);
-			this.radioButton1.Name = "radioButton1";
-			this.radioButton1.Size = new System.Drawing.Size(44, 17);
-			this.radioButton1.TabIndex = 17;
-			this.radioButton1.Text = "\\n\\r";
-			this.radioButton1.UseVisualStyleBackColor = true;
+			this.scrollOutputChkbox.AutoSize = true;
+			this.scrollOutputChkbox.Checked = true;
+			this.scrollOutputChkbox.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.scrollOutputChkbox.Location = new System.Drawing.Point(18, 109);
+			this.scrollOutputChkbox.Name = "scrollOutputChkbox";
+			this.scrollOutputChkbox.Size = new System.Drawing.Size(124, 17);
+			this.scrollOutputChkbox.TabIndex = 18;
+			this.scrollOutputChkbox.Text = "Scroll output window";
+			this.scrollOutputChkbox.UseVisualStyleBackColor = true;
 			// 
-			// radioButton2
+			// speedOverrideNumber
 			// 
-			this.radioButton2.AutoSize = true;
-			this.radioButton2.Checked = true;
-			this.radioButton2.Location = new System.Drawing.Point(214, 17);
-			this.radioButton2.Name = "radioButton2";
-			this.radioButton2.Size = new System.Drawing.Size(44, 17);
-			this.radioButton2.TabIndex = 18;
-			this.radioButton2.TabStop = true;
-			this.radioButton2.Text = "\\r\\n";
-			this.radioButton2.UseVisualStyleBackColor = true;
+			this.speedOverrideNumber.Location = new System.Drawing.Point(122, 61);
+			this.speedOverrideNumber.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+			this.speedOverrideNumber.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.speedOverrideNumber.Name = "speedOverrideNumber";
+			this.speedOverrideNumber.Size = new System.Drawing.Size(66, 20);
+			this.speedOverrideNumber.TabIndex = 18;
+			this.speedOverrideNumber.Value = new decimal(new int[] {
+            60,
+            0,
+            0,
+            0});
 			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(609, 397);
+			this.ClientSize = new System.Drawing.Size(609, 394);
+			this.Controls.Add(this.scrollOutputChkbox);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.serialResponseList);
@@ -265,7 +316,9 @@
 			this.groupBox1.PerformLayout();
 			this.groupBox2.ResumeLayout(false);
 			this.groupBox2.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.speedOverrideNumber)).EndInit();
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
@@ -291,6 +344,9 @@
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.RadioButton radioButton2;
 		private System.Windows.Forms.RadioButton radioButton1;
+		private System.Windows.Forms.CheckBox scrollOutputChkbox;
+		private System.Windows.Forms.CheckBox overrideSpeedChkbox;
+		private System.Windows.Forms.NumericUpDown speedOverrideNumber;
 	}
 }
 
